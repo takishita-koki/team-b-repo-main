@@ -139,7 +139,12 @@ app.post('/machines/:id/like', (req, res) => {
   }
 
   // いいね数を増やす処理をここに追加
-
+  db.run(
+    'UPDATE machines SET likes =likes + 1 WHERE id = ?',
+    [req.params.id],
+    () => {
+    }
+  );
   res.redirect(redirectPath);
 });
 
