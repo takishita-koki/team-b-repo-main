@@ -117,13 +117,17 @@ app.get('/search', (req, res) => {
     return res.render('search', { machines: [], keyword: '' }); // 検索ワードなしの場合の処理
   }
 
-  // データベースから検索ワードに合致する機械情報を取得する処理をここに追加
-
-  // cheap_machines.ejsに遷移するように変更。
-  // ヒント: res.render('ファイル名', { keyword: DBから取得した値, machines: DBから取得した値 })
-  res.redirect('/');
+  db.all(
+    'SELECT * FROM machines WHERE name LIKE ?',
+    ["%" + keyword + "%"],
+    (err, machines) => {
+      if (err) {
+        return res.status(500).send('エラーが発生しました');
+      }
+      res.render('search', { machines: machines, keyword: keyword });
+    }
+  );
 });
-
 // 課題3: 「いいね」ボタンの処理
 app.post('/machines/:id/like', (req, res) => {
   const machineId = req.params.id;
