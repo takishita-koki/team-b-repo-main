@@ -155,10 +155,13 @@ app.post('/machines/:id/like', (req, res) => {
 // 課題4: 人気順（いいねの多い順）に機械を表示(front・backend)
 app.get('/machines/popular', (req, res) => {
   // データベースからいいねの多い順に機械の情報を取得する処理をここに追加
-
+  db.all(
+    'SELECT * FROM machines order by likes desc',[],(error,machines) => {
+       res.render('popular_machines', { machines: machines });
+    }
+   );
   // 取得したデータをpopular_machines.ejsに渡す
   // ヒント: res.render('ファイル名', {machines: データベースから取得した値})
-  res.redirect('/');
 });
 
 app.post('/rental/:id', (req, res) => {
